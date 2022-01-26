@@ -18,27 +18,33 @@ void Update( Event & event ,RenderWindow & window, CircleShape & bead)
 		switch (event.type)
 		{
 		case Event::EventType::KeyReleased :
-			if(event.key.code == Keyboard::Key::P)
-
+		{
 			if (event.key.code == Keyboard::Key::Escape)
-				window.close();
-			
+			{			
+				window.close(); break;
+			}	
 			if (event.key.code == Keyboard::Key::Up && bead.getPosition().y > 70)
-					 bead.setPosition(bead.getPosition().x, bead.getPosition().y - 77);
-			
+			{
+				bead.setPosition(bead.getPosition().x, bead.getPosition().y - 77); break;
+			}
 			if (event.key.code == Keyboard::Key::Down && bead.getPosition().y + 70 < 720)
-				bead.setPosition(bead.getPosition().x, bead.getPosition().y + 77);
-			
+			{
+				bead.setPosition(bead.getPosition().x, bead.getPosition().y + 77); break;
+			}
 			if (event.key.code == Keyboard::Key::Left && bead.getPosition().x > 65)
-				bead.setPosition(bead.getPosition().x - 77, bead.getPosition().y);
-			
+			{
+				bead.setPosition(bead.getPosition().x - 77, bead.getPosition().y); break;
+			}
 			if (event.key.code == Keyboard::Key::Right && bead.getPosition().x + 70 < 735)
-				bead.setPosition(bead.getPosition().x + 77, bead.getPosition().y);
+			{
+				bead.setPosition(bead.getPosition().x + 77, bead.getPosition().y); break;
+			}
 		break;
-		
+		}
+
 		case Event :: EventType :: MouseButtonReleased :
-			if (event.mouseButton.button == Mouse::Button::Left )
-				bead.setPosition(Mouse::getPosition(window).x-11, Mouse::getPosition(window).y-11);
+			if (event.mouseButton.button == Mouse::Button::Left)
+				bead.setPosition(Mouse::getPosition(window).x - 11, Mouse::getPosition(window).y - 11);
 		break;
 
 		case Event::EventType::Closed:
@@ -51,24 +57,19 @@ void Update( Event & event ,RenderWindow & window, CircleShape & bead)
 	}
 	
 }
-
 void placewall(RenderWindow & window)
 {
-	RectangleShape rect(Vector2f(138, 15));
+	RectangleShape rect(Vector2f(137, 15));
 	rect.setFillColor(Color::Blue);
-	rect.setOrigin(Vector2f(340, 347));
-	rect.setPosition(Vector2f(15, 0));
-	if (Keyboard::isKeyPressed(Keyboard::R))
-		rect.setRotation(180);
+	rect.setPosition(Vector2f(850, 400));
+	rect.setRotation(90);
 	window.draw(rect);
 }
-
-
 int main()
 {
 
-	VideoMode vm(1080, 800);             // create a video mode objejt
-	RenderWindow window(vm , " quorider !!", Style::Default);             // craete and open a window for the game 
+	             // create a video mode objejt
+	RenderWindow window( VideoMode (1080, 800) , " quorider !!", Style::Default);             // craete and open a window for the game 
 	window.setFramerateLimit(10);
 
 
@@ -90,47 +91,56 @@ int main()
 	bead2.setFillColor(Color::Black);	
 	bead2.setPosition(362, 677);
 
-	
-	Event event1 ;
-	
+	bool turn1 =true ;
+	bool turn2 = false ;
+
     // main game loop
-	int  turn = 0 ;
+	
 	while (window.isOpen())
 	{
-
+		Event event ;
+		string input = {} ;
 		window.clear(Color::White);                   // clear old frame
 
 		 //draw our game scane here												 
 		window.draw(spritebackground);               // draw background 
 		window.draw(bead1);
 		window.draw(bead2);
-				
+		
+
 		//update 
-		RectangleShape rect(Vector2f(138, 15));
-		rect.setFillColor(Color::Blue);
-		rect.setOrigin(Vector2f(340, 347));
-		rect.setPosition(Vector2f(15, 0));
-		if (Keyboard::isKeyPressed(Keyboard::R))
-				rect.setRotation(180);
-		
-
 
 		
-		if (turn % 2 == 0)
-		{
-			Update(event1, window, bead1);
-			window.draw(bead1);
-			window.draw(rect);
-		}
-		else 
-		{ 		
-			Update(event1, window, bead2); 
-			window.draw(bead2);
-			window.draw(rect);
-		}
-		turn++;
+		turn1 = !turn1;
+		turn2 = !turn2;
+		
 	
+		if (Keyboard::isKeyPressed(Keyboard::P))
+		{
+			placewall(window);
+			
+		}
+	
+		if ( turn1 )
+		{ 		
+			Update(event, window, bead1);	
+			window.draw(bead1);
+			
+			
+		}	
+		if ( turn2 )		
+		{
+			Update(event, window, bead2);
+			window.draw(bead2);
+		}
+
+
+		cout << turn1 << "  " << turn2<< endl;
+
+
 		// render 
+
+
 		window.display();
 	}
 
